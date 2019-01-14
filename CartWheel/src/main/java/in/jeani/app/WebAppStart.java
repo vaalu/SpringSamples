@@ -1,0 +1,17 @@
+package in.jeani.app;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+/**
+ * Hello world!
+ *
+ */
+@SpringBootApplication
+public class WebAppStart 
+{
+	public static void main( String[] args )
+    {
+    	SpringApplication.run(WebAppStart.class, args);
+    }
+}
