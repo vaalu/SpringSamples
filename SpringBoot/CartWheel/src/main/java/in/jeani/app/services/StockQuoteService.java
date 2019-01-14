@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import in.jeani.app.dao.StockQuoteDAO;
+import in.jeani.app.dao.entities.ScripInfoEntity;
 import in.jeani.app.exception.UnsupportedTimeseriesIntervalException;
 import in.jeani.app.web.config.AppConfig;
 
@@ -31,6 +33,9 @@ public class StockQuoteService {
 	
 	@Autowired
 	AppConfig appConfig;
+	
+	@Autowired
+	StockQuoteDAO stockQuoteDAO;
 	
 	/**
 	 * Fetch historic data from alphavantage api and save them in DB
@@ -67,6 +72,38 @@ public class StockQuoteService {
 			LOGGER.error(e.getMessage());
 		}
 		return stockData;
+	}
+	
+	/**
+	 * Fetch all the available scrips information
+	 * @return {@link List<{@link <ScripInfoEntity>}>}
+	 */
+	public List<ScripInfoEntity> fetchAvailableScrips() {
+		return stockQuoteDAO.getAvailableScrips();
+	}
+	
+	/**
+	 * Fetch all the available scrips information
+	 * @return {@link List<{@link <ScripInfoEntity>}>}
+	 */
+	public List<ScripInfoEntity> fetchAvailableScripsStartingWith(String wildCard) {
+		return stockQuoteDAO.getAvailableScripsStartingWith(wildCard);
+	}
+	
+	/**
+	 * Fetch all the available scrips information
+	 * @return {@link List<{@link <ScripInfoEntity>}>}
+	 */
+	public List<ScripInfoEntity> fetchAvailableScripsEndingWith(String wildCard) {
+		return stockQuoteDAO.getAvailableScripsEndingWith(wildCard);
+	}
+	
+	/**
+	 * Fetch all the available scrips information
+	 * @return {@link List<{@link <ScripInfoEntity>}>}
+	 */
+	public List<ScripInfoEntity> fetchAvailableScripsContaining(String wildCard) {
+		return stockQuoteDAO.getAvailableScripsContaining(wildCard);
 	}
 	
 	/**
