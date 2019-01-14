@@ -25,6 +25,7 @@ import in.jeani.app.web.config.AppConfig;
 /**
  * @author mohanavelp
  * Simple service to fetch quote related details such as historic data, etc.,
+ *
  */
 @Service
 public class StockQuoteService {
@@ -44,11 +45,11 @@ public class StockQuoteService {
 	 * @param limit
 	 */
 	public List<StockData> fetchHistoricStockData(String stock, int timeseries, String limit) {
-		
 		Interval timeseriesInterval = getInterval(timeseries);
 		String alphavantageKey = appConfig.getAlphavantageKey();
 		int timeout = appConfig.getAlphavantageTimeout();
-		OutputSize limitSize = getOutputLimit(limit);
+		
+    OutputSize limitSize = getOutputLimit(limit);
 		LOGGER.debug("Alphavantage key: {}, time series interval: {} with limit size: {}",alphavantageKey, timeseriesInterval, limitSize);
 		
 		AlphaVantageConnector connector = new AlphaVantageConnector(alphavantageKey, timeout);
@@ -63,7 +64,6 @@ public class StockQuoteService {
 			stockData = intradayResponse.getStockData();
 			
 			stockQuoteDAO.addHistoricData(stock, stockData);
-			
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -163,5 +163,4 @@ public class StockQuoteService {
 		}		
 		return limitSize;
 	}
-	
 }
