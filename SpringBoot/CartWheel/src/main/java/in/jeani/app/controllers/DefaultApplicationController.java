@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import in.jeani.app.dao.entities.ScripInfoEntity;
@@ -21,7 +22,7 @@ import in.jeani.app.services.StockQuoteService;
  *
  */
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/api")
 public class DefaultApplicationController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DefaultApplicationController.class);
 	
@@ -31,7 +32,7 @@ public class DefaultApplicationController {
 	/**
 	 * @return simple echo for a rest controller
 	 */
-	@RequestMapping("/echo")
+	@RequestMapping(value="/echo", method=RequestMethod.GET)
 	public String echo() {
 		LOGGER.debug("Default application health is fine.");
 		return "Alpha application services are up and running fine";
@@ -43,7 +44,7 @@ public class DefaultApplicationController {
 	 * @param timeseries
 	 * @return {@link List<{@Link StockData}>}
 	 */
-	@RequestMapping(value= {"/{stock}/{timeseries}"})
+	@RequestMapping(value= {"/{stock}/{timeseries}"}, method=RequestMethod.GET)
 	public List<StockData> fetchDefault(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries) {
 		LOGGER.debug("Fetching stock details for stock {} {} with limit: ", stock, timeseries, null);
 		
@@ -59,7 +60,7 @@ public class DefaultApplicationController {
 	 * @param limit
 	 * @return {@link List<{@Link StockData}>}
 	 */
-	@RequestMapping("/{stock}/{timeseries}/{limit}")
+	@RequestMapping(value="/{stock}/{timeseries}/{limit}", method=RequestMethod.GET)
 	public List<StockData> fetch(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries, @PathVariable("limit") String limit) {
 		LOGGER.debug("Fetching stock details for stock {} {} with limit: ", stock, timeseries, limit);
 		
@@ -72,7 +73,7 @@ public class DefaultApplicationController {
 	 * Fetch all available scrips
 	 * @return
 	 */
-	@RequestMapping("/scrips")
+	@RequestMapping(value="/scrips", method=RequestMethod.GET)
 	public List<ScripInfoEntity> fetchScrips() {
 		LOGGER.debug("Fetching available scrips (all available)");
 		return stockQuoteService.fetchAvailableScrips();
@@ -82,7 +83,7 @@ public class DefaultApplicationController {
 	 * Fetch all available scrips using wildcard that starts with
 	 * @return
 	 */
-	@RequestMapping("/scrips/startingwith/{wildcard}")
+	@RequestMapping(value="/scrips/startingwith/{wildcard}", method=RequestMethod.GET)
 	public List<ScripInfoEntity> fetchScrips(@PathVariable("wildcard") String wildCard) {
 		LOGGER.debug("Fetching available scrips (all available)");
 		return stockQuoteService.fetchAvailableScripsStartingWith(wildCard);
@@ -93,7 +94,7 @@ public class DefaultApplicationController {
 	 * Fetch all available scrips using wildcard that ends with
 	 * @return
 	 */
-	@RequestMapping("/scrips/endingwith/{wildcard}")
+	@RequestMapping(value="/scrips/endingwith/{wildcard}", method=RequestMethod.GET)
 	public List<ScripInfoEntity> fetchScripsEnding(@PathVariable("wildcard") String wildCard) {
 		LOGGER.debug("Fetching available scrips (all available)");
 		return stockQuoteService.fetchAvailableScripsEndingWith(wildCard);
@@ -103,7 +104,7 @@ public class DefaultApplicationController {
 	 * Fetch all available scrips using wildcard that contains
 	 * @return
 	 */
-	@RequestMapping("/scrips/containing/{wildcard}")
+	@RequestMapping(value="/scrips/containing/{wildcard}", method=RequestMethod.GET)
 	public List<ScripInfoEntity> fetchScripsContaining(@PathVariable("wildcard") String wildCard) {
 		LOGGER.debug("Fetching available scrips (all available)");
 		return stockQuoteService.fetchAvailableScripsContaining(wildCard);
