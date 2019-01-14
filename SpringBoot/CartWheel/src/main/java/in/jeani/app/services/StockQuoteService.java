@@ -32,19 +32,19 @@ public class StockQuoteService {
 	@Autowired
 	AppConfig appConfig;
 	
-	public void fetchHistoricStockData(String stock, int timeseries) {
+	public void fetchHistoricStockData(String stock, int timeseries, String limit) {
 		
 		Interval timeseriesInterval = getInterval(timeseries);
 		String alphavantageKey = appConfig.getAlphavantageKey();
 		int timeout = appConfig.getAlphavantageTimeout();
-		
-		LOGGER.debug("Alphavantage key: {}, time series interval: {}",alphavantageKey, timeseriesInterval);
+		OutputSize limitSize = getOutputLimit(limit);
+		LOGGER.debug("Alphavantage key: {}, time series interval: {} with limit size: {}",alphavantageKey, timeseriesInterval, limitSize);
 		
 		AlphaVantageConnector connector = new AlphaVantageConnector(alphavantageKey, timeout);
 		TimeSeries stockTimeSeries = new TimeSeries(connector);
 		
 		try {
-			IntraDay intradayResponse = stockTimeSeries.intraDay(stock, timeseriesInterval, OutputSize.FULL);
+			IntraDay intradayResponse = stockTimeSeries.intraDay(stock, timeseriesInterval, limitSize);
 			Map<String, String> metadata = intradayResponse.getMetaData();
 			
 			LOGGER.debug("Information: {}, Stock: ", metadata.get("1. Information"), metadata.get("2. Symbol"));
@@ -82,6 +82,32 @@ public class StockQuoteService {
 			throw new UnsupportedTimeseriesIntervalException("Provided timeseries for the stock quote is invalid " + interval);
 		}		
 		return timeSeriesInterval;
+	}
+	
+	private OutputSize getOutputLimit(String limit) {
+		
+		OutputSize limitSize = null;
+		if(null == limit) {
+			return OutputSize.COMPACT;
+		}
+		try {
+			OutputSize[] seriesValues = OutputSize.values();
+			for (OutputSize series : seriesValues) {
+				if (series.getValue().equalsIgnoreCase(limit)) {
+					limitSize = series;
+					break;
+				}
+			}
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new UnsupportedTimeseriesIntervalException("Provided output limit for the stock quote is invalid " + limitSize);
+		}
+		
+		if(null == limitSize) {
+			throw new UnsupportedTimeseriesIntervalException("Provided output limit for the stock quote is invalid " + limitSize);
+		}		
+		return limitSize;
 	}
 	
 }

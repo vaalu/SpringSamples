@@ -30,11 +30,20 @@ public class DefaultApplicationController {
 		return "Alpha application services are up and running fine";
 	}
 	
-	@RequestMapping("/{stock}/{timeseries}")
-	public String fetch(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries) {
-		LOGGER.debug("Fetching stock details for stock {} {}", stock, timeseries);
+	@RequestMapping(value= {"/{stock}/{timeseries}"})
+	public String fetchDefault(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries) {
+		LOGGER.debug("Fetching stock details for stock {} {} with limit: ", stock, timeseries, null);
 		
-		stockQuoteService.fetchHistoricStockData(stock, timeseries);
+		stockQuoteService.fetchHistoricStockData(stock, timeseries, null);
+		
+		return "Fetching stock details for stock";
+	}
+	
+	@RequestMapping("/{stock}/{timeseries}/{limit}")
+	public String fetch(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries, @PathVariable("limit") String limit) {
+		LOGGER.debug("Fetching stock details for stock {} {} with limit: ", stock, timeseries, limit);
+		
+		stockQuoteService.fetchHistoricStockData(stock, timeseries, limit);
 		
 		return "Fetching stock details for stock";
 	}
