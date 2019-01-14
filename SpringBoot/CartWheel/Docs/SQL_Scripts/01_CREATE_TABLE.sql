@@ -11,14 +11,14 @@ WITH (
 CREATE TABLE "ETLREWRITE"."HISTORICAL_INTRADAY_DATA" (
 	"SCRIP" varchar(50) NOT NULL,
 	"DATE_TIME" timestamp NOT NULL,
-	"OPEN" numeric(8,4) NOT NULL,
-	"HIGH" numeric(8,4) NOT NULL,
-	"LOW" numeric(8,4) NOT NULL,
-	"CLOSE" numeric(8,4) NOT NULL,
-	"ADJUSTED_CLOSE" numeric(8,4) NOT NULL,
-	"VOLUME" numeric(8,4) NULL,
-	"DIVIDEND_AMOUNT" numeric(8,4) NULL,
-	"SPREAD" numeric(8,4) NULL
+	"OPEN" numeric(16,4) NOT NULL,
+	"HIGH" numeric(16,4) NOT NULL,
+	"LOW" numeric(16,4) NOT NULL,
+	"CLOSE" numeric(16,4) NOT NULL,
+	"ADJUSTED_CLOSE" numeric(16,4) NOT NULL,
+	"VOLUME" numeric(16,4) NULL,
+	"DIVIDEND_AMOUNT" numeric(16,4) NULL,
+	"SPREAD" numeric(16,4) NULL
 )
 WITH (
 	OIDS=FALSE

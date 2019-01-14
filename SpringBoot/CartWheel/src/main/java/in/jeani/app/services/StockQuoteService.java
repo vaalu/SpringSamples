@@ -62,9 +62,7 @@ public class StockQuoteService {
 			LOGGER.debug("Information: {}, Stock: ", metadata.get("1. Information"), metadata.get("2. Symbol"));
 			stockData = intradayResponse.getStockData();
 			
-			for (StockData data : stockData) {
-				LOGGER.debug("Date: {}, Open {}, High {}, Low {}, Close {}", data.getDateTime(), data.getOpen(), data.getHigh(), data.getLow(), data.getClose());
-			}
+			stockQuoteDAO.addHistoricData(stock, stockData);
 			
 		} 
 		catch (Exception e) {
