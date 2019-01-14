@@ -22,7 +22,7 @@ import in.jeani.app.web.config.AppConfig;
 
 /**
  * @author mohanavelp
- *
+ * Simple service to fetch quote related details such as historic data, etc.,
  */
 @Service
 public class StockQuoteService {
@@ -32,7 +32,13 @@ public class StockQuoteService {
 	@Autowired
 	AppConfig appConfig;
 	
-	public void fetchHistoricStockData(String stock, int timeseries, String limit) {
+	/**
+	 * Fetch historic data from alphavantage api and save them in DB
+	 * @param stock
+	 * @param timeseries
+	 * @param limit
+	 */
+	public List<StockData> fetchHistoricStockData(String stock, int timeseries, String limit) {
 		
 		Interval timeseriesInterval = getInterval(timeseries);
 		String alphavantageKey = appConfig.getAlphavantageKey();
@@ -42,13 +48,14 @@ public class StockQuoteService {
 		
 		AlphaVantageConnector connector = new AlphaVantageConnector(alphavantageKey, timeout);
 		TimeSeries stockTimeSeries = new TimeSeries(connector);
+		List<StockData> stockData = null;
 		
 		try {
 			IntraDay intradayResponse = stockTimeSeries.intraDay(stock, timeseriesInterval, limitSize);
 			Map<String, String> metadata = intradayResponse.getMetaData();
 			
 			LOGGER.debug("Information: {}, Stock: ", metadata.get("1. Information"), metadata.get("2. Symbol"));
-			List<StockData> stockData = intradayResponse.getStockData();
+			stockData = intradayResponse.getStockData();
 			
 			for (StockData data : stockData) {
 				LOGGER.debug("Date: {}, Open {}, High {}, Low {}, Close {}", data.getDateTime(), data.getOpen(), data.getHigh(), data.getLow(), data.getClose());
@@ -57,9 +64,16 @@ public class StockQuoteService {
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
+		return stockData;
 	}
 	
+	/**
+	 * Fetch interval from enum
+	 * @param interval
+	 * @return {@link Interval}
+	 */
 	private Interval getInterval(int interval) {
 		
 		Interval timeSeriesInterval = null;
@@ -84,6 +98,11 @@ public class StockQuoteService {
 		return timeSeriesInterval;
 	}
 	
+	/**
+	 * Fetch output size from enum
+	 * @param limit
+	 * @return {@link OutputSize}
+	 */
 	private OutputSize getOutputLimit(String limit) {
 		
 		OutputSize limitSize = null;

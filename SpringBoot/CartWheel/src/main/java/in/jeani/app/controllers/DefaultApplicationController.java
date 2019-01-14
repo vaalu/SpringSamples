@@ -3,6 +3,9 @@
  */
 package in.jeani.app.controllers;
 
+import java.util.List;
+
+import org.patriques.output.timeseries.data.StockData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,21 +34,21 @@ public class DefaultApplicationController {
 	}
 	
 	@RequestMapping(value= {"/{stock}/{timeseries}"})
-	public String fetchDefault(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries) {
+	public List<StockData> fetchDefault(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries) {
 		LOGGER.debug("Fetching stock details for stock {} {} with limit: ", stock, timeseries, null);
 		
-		stockQuoteService.fetchHistoricStockData(stock, timeseries, null);
+		List<StockData> stockData = stockQuoteService.fetchHistoricStockData(stock, timeseries, null);
 		
-		return "Fetching stock details for stock";
+		return stockData;
 	}
 	
 	@RequestMapping("/{stock}/{timeseries}/{limit}")
-	public String fetch(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries, @PathVariable("limit") String limit) {
+	public List<StockData> fetch(@PathVariable("stock") String stock, @PathVariable("timeseries") int timeseries, @PathVariable("limit") String limit) {
 		LOGGER.debug("Fetching stock details for stock {} {} with limit: ", stock, timeseries, limit);
 		
-		stockQuoteService.fetchHistoricStockData(stock, timeseries, limit);
+		List<StockData> stockData = stockQuoteService.fetchHistoricStockData(stock, timeseries, limit);
 		
-		return "Fetching stock details for stock";
+		return stockData;
 	}
 	
 }
