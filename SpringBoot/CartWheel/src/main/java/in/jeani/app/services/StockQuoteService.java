@@ -49,7 +49,6 @@ public class StockQuoteService {
 		String alphavantageKey = appConfig.getAlphavantageKey();
 		int timeout = appConfig.getAlphavantageTimeout();
 		
-		
     OutputSize limitSize = getOutputLimit(limit);
 		LOGGER.debug("Alphavantage key: {}, time series interval: {} with limit size: {}",alphavantageKey, timeseriesInterval, limitSize);
 		
