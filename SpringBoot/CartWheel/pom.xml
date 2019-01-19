@@ -13,9 +13,10 @@
 		<start-class>in.jeani.app.WebAppStart</start-class>
 		<jstl.version>1.2</jstl.version>
 		<alphanvantage4j.version>1.3-SNAPSHOT</alphanvantage4j.version>
+		<docker.image.prefix>fitch</docker.image.prefix>
 		<swagger-ui.version>2.9.2</swagger-ui.version>
 		<maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.source>1.8</maven.compiler.source>
 	</properties>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -71,6 +72,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+	            <groupId>com.spotify</groupId>
+	            <artifactId>dockerfile-maven-plugin</artifactId>
+	            <version>1.4.9</version>
+	            <configuration>
+	                <repository>${docker.image.prefix}/${project.artifactId}</repository>
+	            </configuration>
+	        </plugin>
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
